@@ -2,6 +2,7 @@ import streamlit as st
 from task_manager import TaskManager
 from datetime import datetime
 import pandas as pd
+import auth  # Import the authentication module
 
 # Set konfigurasi halaman
 st.set_page_config(page_title="Aplikasi Pengelola Tugas", page_icon="📝")
@@ -9,66 +10,79 @@ st.set_page_config(page_title="Aplikasi Pengelola Tugas", page_icon="📝")
 # Judul aplikasi
 st.title("Pengelola Tugas Sederhana")
 
-# Dark mode toggle
-dark_mode = st.checkbox("Aktifkan Mode Gelap")
-
-if dark_mode:
-    st.markdown("""
-        <style>
-        .stApp {
-            background-color: #1e1e1e;
-            color: white;
-        }
-        h1 {
-            color: #4CAF50;
-        }
-        </style>
-        """, unsafe_allow_html=True)
+# Check if user is logged in
+if 'username' not in st.session_state:
+    auth.main()  # Call the authentication function
 else:
-    st.markdown("""
-        <style>
-        .stApp {
-            background-color: #f0f2f5;
-            color: black;
-        }
-        h1 {
-            color: #4CAF50;
-        }
-        </style>
-        """, unsafe_allow_html=True)
+    # Display a greeting message
+    st.write(f"Selamat datang, {st.session_state['username']}!")
+    
+    # Logout button
+    if st.button("Logout"):
+        auth.logout()  # Call the logout function
+        st.session_state.clear()  # Clear session state
+        st.success("You have been logged out.")
 
-# Menampilkan gambar header
-st.image('header_image.jpg', width=800)  # Pastikan path gambar benar
+    # Dark mode toggle
+    dark_mode = st.checkbox("Aktifkan Mode Gelap")
 
-# Menambahkan penjelasan aplikasi
-st.write("""
-    Aplikasi ini dirancang untuk membantu Anda mengelola tugas-tugas Anda dengan lebih efisien.
-    Anda dapat melihat daftar tugas yang harus diselesaikan, termasuk deskripsi, tanggal jatuh tempo, 
-    prioritas, dan status masing-masing tugas.
-""")
+    if dark_mode:
+        st.markdown("""
+            <style>
+            .stApp {
+                background-color: #1e1e1e;
+                color: white;
+            }
+            h1 {
+                color: #4CAF50;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+            <style>
+            .stApp {
+                background-color: #f0f2f5;
+                color: black;
+            }
+            h1 {
+                color: #4CAF50;
+            }
+            </style>
+            """, unsafe_allow_html=True)
 
-task_manager = TaskManager()
+    # Menampilkan gambar header
+    st.image('header_image.jpg', width=800)  # Pastikan path gambar benar
 
-# Ensure 'Tanggal Jatuh Tempo' is in datetime format
-task_manager.data['Tanggal Jatuh Tempo'] = pd.to_datetime(task_manager.data['Tanggal Jatuh Tempo'], errors='coerce')
+    # Menambahkan penjelasan aplikasi
+    st.write("""
+        Aplikasi ini dirancang untuk membantu Anda mengelola tugas-tugas Anda dengan lebih efisien.
+        Anda dapat melihat daftar tugas yang harus diselesaikan, termasuk deskripsi, tanggal jatuh tempo, 
+        prioritas, dan status masing-masing tugas.
+    """)
 
-# Filter out tasks with invalid due dates
-valid_tasks = task_manager.data[task_manager.data['Tanggal Jatuh Tempo'].notna()]
+    task_manager = TaskManager()
 
-# Check for tasks due tomorrow
-tomorrow = datetime.now().date() + pd.Timedelta(days=1)
-upcoming_tasks = valid_tasks[
-    valid_tasks['Tanggal Jatuh Tempo'].dt.date == tomorrow
-]
+    # Ensure 'Tanggal Jatuh Tempo' is in datetime format
+    task_manager.data['Tanggal Jatuh Tempo'] = pd.to_datetime(task_manager.data['Tanggal Jatuh Tempo'], errors='coerce')
 
-if not upcoming_tasks.empty:
-    st.warning("Anda memiliki tugas yang harus diselesaikan besok:")
-    for _, task in upcoming_tasks.iterrows():
-        st.write(f"- {task['Tugas']} (Jatuh Tempo: {task['Tanggal Jatuh Tempo']})")
+    # Filter out tasks with invalid due dates
+    valid_tasks = task_manager.data[task_manager.data['Tanggal Jatuh Tempo'].notna()]
 
-st.subheader("Daftar Tugas :clipboard:")
-st.dataframe((task_manager.data))
+    # Check for tasks due tomorrow
+    tomorrow = datetime.now().date() + pd.Timedelta(days=1)
+    upcoming_tasks = valid_tasks[
+        valid_tasks['Tanggal Jatuh Tempo'].dt.date == tomorrow
+    ]
 
-# Inisialisasi session state untuk menyimpan data tugas
-if "tasks" not in st.session_state:
-    st.session_state.tasks = []
+    if not upcoming_tasks.empty:
+        st.warning("Anda memiliki tugas yang harus diselesaikan besok:")
+        for _, task in upcoming_tasks.iterrows():
+            st.write(f"- {task['Tugas']} (Jatuh Tempo: {task['Tanggal Jatuh Tempo']})")
+
+    st.subheader("Daftar Tugas :clipboard:")
+    st.dataframe((task_manager.data))
+
+    # Inisialisasi session state untuk menyimpan data tugas
+    if "tasks" not in st.session_state:
+        st.session_state.tasks = []

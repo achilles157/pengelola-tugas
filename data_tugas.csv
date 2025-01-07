@@ -1,4 +1,3 @@
-Tugas,Deskripsi,Tanggal Jatuh Tempo,Prioritas,Status
-DDP,psad,2025-01-08,Rendah,Belum Selesai
-sastra,sadas,2025-01-09,Rendah,Selesai
-program,sadsa,2025-01-07,Tinggi,Belum Selesai
+Tugas,Deskripsi,Tanggal Jatuh Tempo,Prioritas,Status,Username
+sastra,puisi,2025-01-08,Sedang,Belum Selesai,abip
+ddp,buat streamlit,2025-01-10,Tinggi,Belum Selesai,abip

@@ -4,6 +4,10 @@ from task_manager import TaskManager
 task_manager = TaskManager()
 
 def kelola_tugas():
+    if 'username' not in st.session_state:
+        st.error("Anda harus login terlebih dahulu.")
+        return
+
     if not task_manager.data.empty:
         st.subheader("Kelola Tugas :seedling:")
         
@@ -40,7 +44,8 @@ def kelola_tugas():
                 col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
                 
                 with col1:
-                    st.write(f"{i + 1}. {task} - Status: {filtered_data.at[i, 'Status']}")
+                    st.write(f"{i + 1}. **{task}** -  Status: {filtered_data.at[i, 'Status']}")
+                    st.write(f"   **Deskripsi:** {filtered_data.at[i, 'Deskripsi']}")
                     
                 with col2:
                     if st.button("Selesai", key=f"selesai_{i}"):

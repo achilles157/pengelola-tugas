@@ -5,9 +5,11 @@ import matplotlib.pyplot as plt
 task_manager = TaskManager()
 
 def tampilkan_statistik():
+    if 'username' not in st.session_state:
+        st.error("Anda harus login terlebih dahulu.")
+        return
+
     if not task_manager.data.empty:
-        st.subheader("Statistik Tugas :roller_coaster:")
-        
         # Bar chart for task priorities
         st.bar_chart(task_manager.data['Prioritas'].value_counts())
         
@@ -40,4 +42,5 @@ def tampilkan_statistik():
     else:
         st.write("Tidak ada tugas yang tersedia.")
 
+st.header("Statistik Tugas :roller_coaster:")
 tampilkan_statistik()
