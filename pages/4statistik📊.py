@@ -22,10 +22,14 @@ def tampilkan_statistik():
         
         # Line chart for task completion over time
         task_completion = task_manager.data.groupby('Tanggal Jatuh Tempo')['Status'].value_counts().unstack().fillna(0)
-        task_completion.plot(kind='line', ax=plt.gca())
+        plt.figure(figsize=(10, 5))
+        task_completion.plot(kind='line', marker='o', ax=plt.gca())  # Use line plot with markers
         plt.title('Task Completion Over Time')
         plt.xlabel('Tanggal Jatuh Tempo')
         plt.ylabel('Jumlah Tugas')
+        plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
+        plt.legend(title='Status')
+        plt.tight_layout()  # Adjust layout to prevent overlap
         st.pyplot(plt.gcf())
         
         total_tasks, completed_tasks, pending_tasks = task_manager.get_statistics()

@@ -55,13 +55,14 @@ task_manager.data['Tanggal Jatuh Tempo'] = pd.to_datetime(task_manager.data['Tan
 # Filter out tasks with invalid due dates
 valid_tasks = task_manager.data[task_manager.data['Tanggal Jatuh Tempo'].notna()]
 
-# Check for upcoming due tasks
+# Check for tasks due tomorrow
+tomorrow = datetime.now().date() + pd.Timedelta(days=1)
 upcoming_tasks = valid_tasks[
-    (valid_tasks['Tanggal Jatuh Tempo'] - pd.to_datetime(datetime.now().date())).dt.days <= 3
+    valid_tasks['Tanggal Jatuh Tempo'].dt.date == tomorrow
 ]
 
 if not upcoming_tasks.empty:
-    st.warning("Anda memiliki tugas yang akan jatuh tempo dalam 3 hari ke depan:")
+    st.warning("Anda memiliki tugas yang harus diselesaikan besok:")
     for _, task in upcoming_tasks.iterrows():
         st.write(f"- {task['Tugas']} (Jatuh Tempo: {task['Tanggal Jatuh Tempo']})")
 

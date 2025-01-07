@@ -28,7 +28,7 @@ def tampilkan_kalender():
                     cols[i].write("")
                 else:
                     date_str = f"{year}-{month:02d}-{day:02d}"
-                    tasks_today = task_manager.data[task_manager.data['Tanggal Jatuh Tempo'] == date_str]
+                    tasks_today = task_manager.data[task_manager.data['Tanggal Jatuh Tempo'].dt.date == dt.date(year, month, day)]
                     if not tasks_today.empty:
                         cols[i].markdown(f"**{day}**")
                         for _, task in tasks_today.iterrows():

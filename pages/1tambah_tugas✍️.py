@@ -11,7 +11,6 @@ def tambah_tugas():
         tanggal_jatuh_tempo = st.date_input("Tanggal Jatuh Tempo", min_value=datetime.today())
         prioritas = st.selectbox("Prioritas", ["Rendah", "Sedang", "Tinggi"])
         status = st.selectbox("Status", ["Belum Selesai", "Selesai"])
-        
         submitted = st.form_submit_button("Submit")
         reset = st.form_submit_button("Reset")
 
@@ -30,8 +29,7 @@ def tambah_tugas():
                     'Status': status
                 }
                 task_manager.add_task(new_task)
-                st.success("Anda telah menambahkan tugas baru:")
-                st.write(new_task)
+                st.success(f"Tugas '{nama_tugas}' telah ditambahkan!")
 
 st.header("Tambah Tugas :star:")
 tambah_tugas()
