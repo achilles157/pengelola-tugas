@@ -1,0 +1,31 @@
+import streamlit as st
+from task_manager import TaskManager
+import matplotlib.pyplot as plt
+
+task_manager = TaskManager()
+
+def tampilkan_statistik():
+    if not task_manager.data.empty:
+        st.subheader("Statistik Tugas :roller_coaster:")
+        
+        # Bar chart for task priorities
+        st.bar_chart(task_manager.data['Prioritas'].value_counts())
+        
+        # Pie chart for task completion status
+        completion_counts = task_manager.data['Status'].value_counts()
+        st.write("Status Tugas:")
+        
+        # Create a figure and axis for the pie chart
+        fig, ax = plt.subplots()
+        ax.pie(completion_counts, labels=completion_counts.index, autopct='%1.1f%%')
+        st.pyplot(fig)
+        
+        total_tasks, completed_tasks, pending_tasks = task_manager.get_statistics()
+        
+        st.write(f"Total Tugas: {total_tasks}")
+        st.write(f"Tugas Selesai: {completed_tasks}")
+        st.write(f"Tugas Belum Selesai: {pending_tasks}")
+    else:
+        st.write("Tidak ada tugas yang tersedia.")
+
+tampilkan_statistik()
