@@ -52,12 +52,6 @@ task_manager = TaskManager()
 # Ensure 'Tanggal Jatuh Tempo' is in datetime format
 task_manager.data['Tanggal Jatuh Tempo'] = pd.to_datetime(task_manager.data['Tanggal Jatuh Tempo'], errors='coerce')
 
-# Convert other columns to appropriate types if necessary
-task_manager.data['Tugas'] = task_manager.data['Tugas'].astype(str)
-task_manager.data['Deskripsi'] = task_manager.data['Deskripsi'].astype(str)
-task_manager.data['Prioritas'] = task_manager.data['Prioritas'].astype(str)
-task_manager.data['Status'] = task_manager.data['Status'].astype(str)
-
 # Filter out tasks with invalid due dates
 valid_tasks = task_manager.data[task_manager.data['Tanggal Jatuh Tempo'].notna()]
 

@@ -33,21 +33,27 @@ def kelola_tugas():
             filtered_data = filtered_data.sort_values(by='Tanggal Jatuh Tempo')
 
         for i, task in enumerate(filtered_data['Tugas']):
-            col1, col2, col3 = st.columns([3, 1, 1])
+            col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
             
             with col1:
                 st.write(f"{i + 1}. {task} - Status: {filtered_data.at[i, 'Status']}")
                 
             with col2:
                 if st.button("Selesai", key=f"selesai_{i}"):
-                    task_manager.update_status(i, "Selesai")
+                    task_manager.update_status(filtered_data.index[i], "Selesai")
                     st.success(f"Tugas '{task}' telah ditandai selesai!")
                     
             with col3:
+                if st.button("Tandai Belum Selesai", key=f"belum_selesai_{i}"):
+                    task_manager.update_status(filtered_data.index[i], "Belum Selesai")
+                    st.success(f"Tugas '{task}' telah ditandai belum selesai!")
+                    
+            with col4:
                 if st.button("Hapus", key=f"hapus_{i}"):
-                    if st.confirm("Apakah Anda yakin ingin menghapus tugas ini?"):
-                        task_manager.delete_task(i)
-                        st.success(f"Tugas '{task}' telah dihapus!")
+                    task_manager.delete_task(filtered_data.index[i])  # Use the index of the filtered data
+                    st.success(f"Tugas '{task}' telah dihapus!")
+                    # Refresh the displayed data
+                    filtered_data = task_manager.data  # Update filtered_data to reflect the current state
     else:
         st.write("Tidak ada tugas yang tersedia.")
 

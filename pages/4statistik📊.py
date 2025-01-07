@@ -20,6 +20,14 @@ def tampilkan_statistik():
         ax.pie(completion_counts, labels=completion_counts.index, autopct='%1.1f%%')
         st.pyplot(fig)
         
+        # Line chart for task completion over time
+        task_completion = task_manager.data.groupby('Tanggal Jatuh Tempo')['Status'].value_counts().unstack().fillna(0)
+        task_completion.plot(kind='line', ax=plt.gca())
+        plt.title('Task Completion Over Time')
+        plt.xlabel('Tanggal Jatuh Tempo')
+        plt.ylabel('Jumlah Tugas')
+        st.pyplot(plt.gcf())
+        
         total_tasks, completed_tasks, pending_tasks = task_manager.get_statistics()
         
         st.write(f"Total Tugas: {total_tasks}")
