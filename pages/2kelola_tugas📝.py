@@ -44,8 +44,8 @@ def kelola_tugas():
                 col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
                 
                 with col1:
-                    st.write(f"{i + 1}. **{task}** -  Status: {filtered_data.at[i, 'Status']}")
-                    st.write(f"   **Deskripsi:** {filtered_data.at[i, 'Deskripsi']}")
+                    st.write(f"{i + 1}. **{task}**")
+                    st.write(f"   **Deskripsi:** {filtered_data.iloc[i]['Deskripsi']} - Status: {filtered_data.iloc[i]['Status']}")
                     
                 with col2:
                     if st.button("Selesai", key=f"selesai_{i}"):
