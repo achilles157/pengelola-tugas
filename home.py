@@ -23,12 +23,14 @@ else:
         st.session_state.clear()  # Clear session state
         st.success("You have been logged out.")
 
-    # Dark mode toggle
-    dark_mode = st.checkbox("Aktifkan Mode Gelap")
-
-    if dark_mode:
-        st.markdown("""
-            <style>
+    # Dark mode toggle based on user's browser preference
+    st.markdown("""
+        <style>
+        .stApp {
+            background-color: #f0f2f5;
+            color: black;
+        }
+        @media (prefers-color-scheme: dark) {
             .stApp {
                 background-color: #1e1e1e;
                 color: white;
@@ -36,20 +38,9 @@ else:
             h1 {
                 color: #4CAF50;
             }
-            </style>
-            """, unsafe_allow_html=True)
-    else:
-        st.markdown("""
-            <style>
-            .stApp {
-                background-color: #f0f2f5;
-                color: black;
-            }
-            h1 {
-                color: #4CAF50;
-            }
-            </style>
-            """, unsafe_allow_html=True)
+        }
+        </style>
+    """, unsafe_allow_html=True)
 
     # Menampilkan gambar header
     st.image('header_image.jpg', width=800)  # Pastikan path gambar benar
