@@ -9,7 +9,6 @@ def kelola_tugas():
         return
 
     if not task_manager.data.empty:
-        st.subheader("Kelola Tugas :seedling:")
         
         # Search functionality
         search_query = st.text_input("Cari Tugas:")
@@ -64,4 +63,5 @@ def kelola_tugas():
     else:
         st.write("Tidak ada tugas yang tersedia.")
 
+st.header("Kelola Tugas :seedling:")
 kelola_tugas()

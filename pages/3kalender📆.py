@@ -12,7 +12,6 @@ def tampilkan_kalender():
         return
 
     if not task_manager.data.empty:
-        st.subheader("Kalender Tugas :hourglass_flowing_sand:")
         
         # Mengonversi kolom tanggal jatuh tempo ke datetime
         task_manager.data['Tanggal Jatuh Tempo'] = pd.to_datetime(task_manager.data['Tanggal Jatuh Tempo'], errors='coerce')
@@ -48,4 +47,5 @@ def tampilkan_kalender():
                     else:
                         cols[i].write("")  # Empty cell for days with no tasks
 
+st.header("Kalender Tugas :hourglass_flowing_sand:")
 tampilkan_kalender()
